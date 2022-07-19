@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:movielib/locator.dart';
+import 'package:movielib/model/comment_model.dart';
 import 'package:movielib/model/user_model.dart';
 import 'package:movielib/repository/user_repository.dart';
 import 'package:movielib/services/auth_service.dart';
@@ -108,6 +109,11 @@ class UserModel with ChangeNotifier implements AuthService {
       String posterPath, List genreIDs, num voteAverage, DateTime date) async {
     var result = await _userRepository.removeWatchLater(
         userID, movieID, title, posterPath, genreIDs, voteAverage, date);
+    return result;
+  }
+
+  Future<bool> addComment(Comment comment) async {
+    var result = await _userRepository.addComment(comment);
     return result;
   }
 }

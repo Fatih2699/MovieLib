@@ -2,6 +2,7 @@ import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:movielib/constants/app_constants.dart';
+import 'package:movielib/deneme/deneme_comment_page.dart';
 import 'package:movielib/model/movie_actor.dart';
 import 'package:movielib/model/movie_model.dart';
 import 'package:movielib/model/movie_trailer_model.dart';
@@ -421,6 +422,23 @@ class _DetailScreenState extends State<DetailScreen> {
                                       } else {
                                         _removeFavorite();
                                       }
+                                    },
+                                  ),
+                                ),
+                                Align(
+                                  alignment: Alignment.bottomLeft,
+                                  child: IconButton(
+                                    icon: const Icon(Icons.comment_outlined,
+                                        color: Colors.purpleAccent),
+                                    onPressed: () {
+                                      debugPrint(movie!.id.toString());
+                                      Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                          builder: (context) =>
+                                              DenemeYorum(id: widget.id),
+                                        ),
+                                      );
                                     },
                                   ),
                                 ),

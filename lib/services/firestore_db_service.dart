@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:movielib/model/comment_model.dart';
 import 'package:movielib/model/user_model.dart';
 import 'package:movielib/services/database_base.dart';
 
@@ -122,6 +123,20 @@ class FireStoreDBService implements DBBase {
         }
       ])
     });
+    return true;
+  }
+
+  Future<bool> addComment(Comment comment) async {
+    var added = await _firebaseDB.collection("comments").add(comment.toMap());
+    DocumentSnapshot _okunanComment =
+        await FirebaseFirestore.instance.doc('comments/$added').get();
+    Map<String, dynamic> _okunanCommentBilgileriMapi =
+        _okunanComment.data() as Map<String, dynamic>;
+    Comment _okunanCommentBilgileriNesne =
+        Comment.fromMap(_okunanCommentBilgileriMapi);
+    print(
+      "Okunan Comment:" + _okunanCommentBilgileriNesne.toString(),
+    );
     return true;
   }
 }

@@ -1,8 +1,8 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:movielib/deneme/deneme_comment_page.dart';
 import 'package:movielib/locator.dart';
 import 'package:movielib/onboarding.dart';
-import 'package:movielib/screens/home_screen.dart';
 import 'package:movielib/view_models/movie_view_models.dart';
 import 'package:movielib/view_models/user_view_models.dart';
 import 'package:provider/provider.dart';
@@ -55,7 +55,8 @@ class _MyAppState extends State<MyApp> {
         //   const Locale('tr', 'TR'),
         // ],
         title: 'movieLibs',
-        home: widget.showHome ? const HomeScreen() : const OnboardingPage(),
+        home:
+            widget.showHome ? DenemeYorum(id: 361743) : const OnboardingPage(),
       ),
     );
   }

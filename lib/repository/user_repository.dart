@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:movielib/locator.dart';
+import 'package:movielib/model/comment_model.dart';
 import 'package:movielib/model/user_model.dart';
 import 'package:movielib/services/auth_service.dart';
 import 'package:movielib/services/firebase_auth_service.dart';
@@ -81,5 +82,9 @@ class UserRepository implements AuthService {
       String posterPath, List genreIDs, num voteAverage, DateTime date) async {
     return await _fireStoreDBService.removeWatchLater(
         userID, movieID, title, posterPath, genreIDs, voteAverage, date);
+  }
+
+  Future<bool> addComment(Comment comment) async {
+    return await _fireStoreDBService.addComment(comment);
   }
 }
