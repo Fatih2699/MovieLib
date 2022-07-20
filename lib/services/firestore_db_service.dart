@@ -25,7 +25,6 @@ class FireStoreDBService implements DBBase {
         await _firebaseDB.collection('users').doc(userID).get();
     Map<String, dynamic> _okunanUserBilgileriMap =
         _okunanUser.data() as Map<String, dynamic>;
-    print('okunan' + _okunanUserBilgileriMap.toString());
     UserData _okunanaUserNesnesi = UserData.fromMap(_okunanUserBilgileriMap);
     return _okunanaUserNesnesi;
   }
@@ -134,9 +133,6 @@ class FireStoreDBService implements DBBase {
         _okunanComment.data() as Map<String, dynamic>;
     Comment _okunanCommentBilgileriNesne =
         Comment.fromMap(_okunanCommentBilgileriMapi);
-    print(
-      "Okunan Comment:" + _okunanCommentBilgileriNesne.toString(),
-    );
     return true;
   }
 }

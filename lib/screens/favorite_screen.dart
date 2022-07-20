@@ -11,7 +11,7 @@ import 'package:movielib/view_models/user_view_models.dart';
 import 'package:provider/provider.dart';
 
 class FavoriteScreen extends StatefulWidget {
-  FavoriteScreen({
+  const FavoriteScreen({
     Key? key,
   }) : super(key: key);
 
@@ -20,6 +20,7 @@ class FavoriteScreen extends StatefulWidget {
 }
 
 class _FavoriteScreenState extends State<FavoriteScreen> {
+  String search = "";
   @override
   Widget build(BuildContext context) {
     UserModel _user = Provider.of<UserModel>(context, listen: false);
@@ -57,6 +58,11 @@ class _FavoriteScreenState extends State<FavoriteScreen> {
                           height: 60.0,
                           width: 330,
                           child: TextFormField(
+                            onChanged: (val) {
+                              setState(() {
+                                search = val;
+                              });
+                            },
                             keyboardType: TextInputType.emailAddress,
                             style: const TextStyle(
                                 color: ApplicationConstants.gri),
@@ -98,9 +104,14 @@ class _FavoriteScreenState extends State<FavoriteScreen> {
               ),
               Expanded(
                 child: StreamBuilder<QuerySnapshot>(
-                    stream: FirebaseFirestore.instance
-                        .collection('users')
-                        .snapshots(),
+                    stream: (search != "")
+                        ? FirebaseFirestore.instance
+                            .collection('users')
+                            .where('favorite-movies', arrayContains: search)
+                            .snapshots()
+                        : FirebaseFirestore.instance
+                            .collection('users')
+                            .snapshots(),
                     builder: (context, snapshot) {
                       if (snapshot.connectionState == ConnectionState.waiting) {
                         debugPrint('girdi1');

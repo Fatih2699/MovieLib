@@ -2,10 +2,10 @@ import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:movielib/constants/app_constants.dart';
-import 'package:movielib/deneme/deneme_comment_page.dart';
 import 'package:movielib/model/movie_actor.dart';
 import 'package:movielib/model/movie_model.dart';
 import 'package:movielib/model/movie_trailer_model.dart';
+import 'package:movielib/screens/comment_screen.dart';
 import 'package:movielib/screens/favorite_screen.dart';
 import 'package:movielib/screens/splash_screen.dart';
 import 'package:movielib/screens/watch_later_screen.dart';
@@ -15,13 +15,13 @@ import 'package:provider/provider.dart';
 import 'package:youtube_player_flutter/youtube_player_flutter.dart';
 
 class DetailScreen extends StatefulWidget {
-  int id;
-  List genreIDs;
-  String title;
-  String posterPath;
-  num voteAverage;
-  DateTime date;
-  DetailScreen({
+  final int id;
+  final List genreIDs;
+  final String title;
+  final String posterPath;
+  final num voteAverage;
+  final DateTime date;
+  const DetailScreen({
     Key? key,
     required this.id,
     required this.title,
@@ -134,7 +134,7 @@ class _DetailScreenState extends State<DetailScreen> {
                   Navigator.push(
                     context,
                     MaterialPageRoute(
-                      builder: (context) => FavoriteScreen(),
+                      builder: (context) => const FavoriteScreen(),
                     ),
                   );
                 },
@@ -167,7 +167,7 @@ class _DetailScreenState extends State<DetailScreen> {
                   Navigator.push(
                     context,
                     MaterialPageRoute(
-                      builder: (context) => FavoriteScreen(),
+                      builder: (context) => const FavoriteScreen(),
                     ),
                   );
                 },
@@ -367,39 +367,20 @@ class _DetailScreenState extends State<DetailScreen> {
                         width: 279,
                         child: Stack(
                           children: <Widget>[
-                            Stack(
-                              children: <Widget>[
-                                Container(
-                                  decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(22.25),
-                                    image: DecorationImage(
-                                      // colorFilter: ColorFilter.mode(
-                                      //   Colors.black.withOpacity(0.5),
-                                      //   BlendMode.softLight,
-                                      // ),
-                                      fit: BoxFit.fill,
-                                      image: NetworkImage(
-                                          ApplicationConstants.poster +
-                                              movie!.posterPath!),
-                                    ),
+                            Container(
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(22.25),
+                                image: DecorationImage(
+                                  colorFilter: ColorFilter.mode(
+                                    Colors.black.withOpacity(0.5),
+                                    BlendMode.hue,
                                   ),
+                                  fit: BoxFit.fill,
+                                  image: NetworkImage(
+                                      ApplicationConstants.poster +
+                                          movie!.posterPath!),
                                 ),
-                                Container(
-                                  decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(22.25),
-                                    color: Colors.white,
-                                    gradient: LinearGradient(
-                                      begin: FractionalOffset.topCenter,
-                                      end: FractionalOffset.bottomCenter,
-                                      colors: [
-                                        Colors.grey.withOpacity(0.1),
-                                        Colors.black,
-                                      ],
-                                      stops: const [0.0, 10.0],
-                                    ),
-                                  ),
-                                ),
-                              ],
+                              ),
                             ),
                             Column(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -426,17 +407,17 @@ class _DetailScreenState extends State<DetailScreen> {
                                   ),
                                 ),
                                 Align(
-                                  alignment: Alignment.bottomLeft,
+                                  alignment: Alignment.centerRight,
                                   child: IconButton(
                                     icon: const Icon(Icons.comment_outlined,
-                                        color: Colors.purpleAccent),
+                                        color: Colors.deepPurpleAccent),
                                     onPressed: () {
                                       debugPrint(movie!.id.toString());
                                       Navigator.push(
                                         context,
                                         MaterialPageRoute(
                                           builder: (context) =>
-                                              DenemeYorum(id: widget.id),
+                                              CommentScreen(id: widget.id),
                                         ),
                                       );
                                     },
@@ -451,7 +432,7 @@ class _DetailScreenState extends State<DetailScreen> {
                                         'daha sonra izle',
                                         style: TextStyle(
                                             color: ApplicationConstants.mor
-                                                .withOpacity(0.5),
+                                                .withOpacity(0.9),
                                             fontSize: 10,
                                             fontWeight: FontWeight.bold),
                                       ),

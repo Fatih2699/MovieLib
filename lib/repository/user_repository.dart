@@ -26,12 +26,11 @@ class UserRepository implements AuthService {
       String email, String password) async {
     UserData? _user = await _firebaseAuthService.createUserWithEmailandPassword(
         email, password);
-    print(_user.toString() + 'userrrrr');
     bool _sonuc = await _fireStoreDBService.saveUser(_user!);
-    print(_sonuc);
     if (_sonuc) {
       return await _fireStoreDBService.readUser(_user.userId);
     }
+    return null;
   }
 
   @override
@@ -39,7 +38,6 @@ class UserRepository implements AuthService {
       String email, String password) async {
     UserData? _user =
         await _firebaseAuthService.signInWithEmailandPassword(email, password);
-    print('suser' + _user.toString());
     return await _fireStoreDBService.readUser(_user!.userId);
   }
 

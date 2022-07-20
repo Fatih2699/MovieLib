@@ -55,10 +55,8 @@ class MovieRepository implements MovieService {
   Future<MovieResponse> searchMovie(String query) async {
     final path =
         '${baseUrl}search/multi?api_key=$apiKey&query=$query&include_adult=true$language';
-    print(path);
     final res = await client.get(Uri.parse(path));
     if (res.statusCode == 200) {
-      print(res.body);
       return MovieResponse.fromMap(jsonDecode(res.body), false);
     } else {
       throw Exception('Filed to load search');

@@ -19,7 +19,7 @@ class FirebaseAuthService implements AuthService {
   }
 
   UserData? _userFromFirebase(User? user) {
-    print(user.toString() + 'userfrmdb');
+    debugPrint(user.toString() + 'userfrmdb');
     if (user == null) {
       return null;
     } else {

@@ -172,7 +172,7 @@ class Movie {
   }
 
   factory Movie.fromMap(Map<String, dynamic> json) => Movie(
-        backdropPath: _getBackdrop(json['backdrop_path']) ?? '',
+        backdropPath: _getBackdrop(json['backdrop_path']),
         genres: List<Genre>.from(json["genres"].map((x) => Genre.fromMap(x))),
         id: json["id"] ?? '',
         imdbId: json["imdb_id"] ?? '',

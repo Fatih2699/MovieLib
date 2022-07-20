@@ -22,8 +22,9 @@ class GenresModel {
 
   String getGenreTitle(List<int> genreIds) {
     String titledGenres = "";
-    genreIds.forEach((e) =>
-        titledGenres += genres.where((g) => g.id == e).first.name + ", ");
+    for (var e in genreIds) {
+      titledGenres += genres.where((g) => g.id == e).first.name + ", ";
+    }
     titledGenres = titledGenres.substring(0, titledGenres.length - 2);
     return titledGenres;
   }

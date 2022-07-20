@@ -13,5 +13,4 @@ abstract class DBBase {
       String posterPath, List genreIDs, num voteAverage, DateTime date);
   Future<bool> removeWatchLater(String userID, int movieID, String title,
       String posterPath, List genreIDs, num voteAverage, DateTime date);
-  //Future<bool> addComment(Comment comment);
 }

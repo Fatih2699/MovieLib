@@ -48,7 +48,6 @@ class UserModel with ChangeNotifier implements AuthService {
       String email, String sifre) async {
     try {
       _user = await _userRepository.signInWithEmailandPassword(email, sifre);
-      debugPrint('USERRRRRR: ' + _user.toString());
       return _user;
     } catch (e) {
       debugPrint(

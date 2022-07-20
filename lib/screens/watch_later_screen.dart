@@ -342,7 +342,6 @@ class _WatchLaterScreenState extends State<WatchLaterScreen> {
       service.onNotificationClick.stream.listen(onNotificationListener);
   void onNotificationListener(String? payload) {
     if (payload != null && payload.isNotEmpty) {
-      print('payload $payload');
       // Navigator.push(
       //   context,
       //   MaterialPageRoute(
