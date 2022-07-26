@@ -276,40 +276,72 @@ class _CommentScreenState extends State<CommentScreen> {
                                               backgroundImage: NetworkImage(
                                                   cData['user_image']!),
                                             ),
-                                            Column(
-                                              mainAxisAlignment:
-                                                  MainAxisAlignment.start,
-                                              crossAxisAlignment:
-                                                  CrossAxisAlignment.start,
-                                              children: <Widget>[
-                                                Padding(
-                                                  padding:
-                                                      const EdgeInsets.only(
-                                                          left: 5),
-                                                  child: Text(
-                                                    '${cData['user_name']!}\n${cData['content']!}',
-                                                    style: const TextStyle(
-                                                      color: Colors.white60,
+                                            Flexible(
+                                              child: Column(
+                                                mainAxisAlignment:
+                                                    MainAxisAlignment.start,
+                                                crossAxisAlignment:
+                                                    CrossAxisAlignment.start,
+                                                children: <Widget>[
+                                                  Padding(
+                                                    padding:
+                                                        const EdgeInsets.only(
+                                                            left: 5),
+                                                    child: Column(
+                                                      crossAxisAlignment:
+                                                          CrossAxisAlignment
+                                                              .start,
+                                                      children: [
+                                                        Text(
+                                                          cData['user_name']!,
+                                                          style:
+                                                              const TextStyle(
+                                                            color:
+                                                                Colors.white60,
+                                                          ),
+                                                        ),
+                                                        Text(
+                                                          cData['content']!,
+                                                          style:
+                                                              const TextStyle(
+                                                            color:
+                                                                Colors.white60,
+                                                          ),
+                                                        )
+                                                      ],
                                                     ),
-                                                    maxLines: 2,
-                                                    overflow:
-                                                        TextOverflow.ellipsis,
                                                   ),
-                                                ),
-                                                Padding(
-                                                  child: Text(
-                                                    formattedDate,
-                                                    style: const TextStyle(
-                                                        color: Colors.grey),
-                                                  ),
-                                                  padding: EdgeInsets.only(
-                                                      left:
-                                                          MediaQuery.of(context)
-                                                                  .size
-                                                                  .height /
-                                                              3.6),
-                                                )
-                                              ],
+                                                  // Padding(
+                                                  //   padding:
+                                                  //       const EdgeInsets.only(
+                                                  //           left: 5),
+                                                  //   child: AutoSizeText(
+                                                  //     '${cData['user_name']!}\n${cData['content']!}',
+                                                  //     style: const TextStyle(
+                                                  //       color: Colors.white60,
+                                                  //     ),
+                                                  //     maxLines: 3,
+                                                  //     minFontSize: 10,
+                                                  //     maxFontSize: 15,
+                                                  //     overflow:
+                                                  //         TextOverflow.ellipsis,
+                                                  //   ),
+                                                  // ),
+                                                  Padding(
+                                                    child: Text(
+                                                      formattedDate,
+                                                      style: const TextStyle(
+                                                          color: Colors.grey),
+                                                    ),
+                                                    padding: EdgeInsets.only(
+                                                        left: MediaQuery.of(
+                                                                    context)
+                                                                .size
+                                                                .height /
+                                                            3.6),
+                                                  )
+                                                ],
+                                              ),
                                             ),
                                           ],
                                         ),
@@ -335,6 +367,7 @@ class _CommentScreenState extends State<CommentScreen> {
                             suffixIcon: IconButton(
                               onPressed: () {
                                 addComment();
+                                clearResults();
                               },
                               icon: const Icon(
                                 Icons.send_rounded,
@@ -355,5 +388,9 @@ class _CommentScreenState extends State<CommentScreen> {
               ),
             ),
           );
+  }
+
+  void clearResults() {
+    controller.clear();
   }
 }

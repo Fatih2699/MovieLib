@@ -1,12 +1,15 @@
+import 'dart:async';
+
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:movielib/locator.dart';
-import 'package:movielib/onboarding.dart';
 import 'package:movielib/screens/home_screen.dart';
 import 'package:movielib/view_models/movie_view_models.dart';
 import 'package:movielib/view_models/user_view_models.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+
+import 'onboarding.dart';
 
 Future<void> main() async {
   setupLocator();
@@ -14,7 +17,6 @@ Future<void> main() async {
   await Firebase.initializeApp();
   final prefs = await SharedPreferences.getInstance();
   final showHome = prefs.getBool('showHome') ?? false;
-
   runApp(MyApp(
     showHome: showHome,
   ));
@@ -46,14 +48,6 @@ class _MyAppState extends State<MyApp> {
         ),
       ],
       child: MaterialApp(
-        // localizationsDelegates: [
-        //   GlobalMaterialLocalizations.delegate,
-        //   GlobalCupertinoLocalizations.delegate,
-        //   GlobalWidgetsLocalizations.delegate,
-        // ],
-        // supportedLocales: [
-        //   const Locale('tr', 'TR'),
-        // ],
         title: 'movieLibs',
         home: widget.showHome ? const HomeScreen() : const OnboardingPage(),
       ),

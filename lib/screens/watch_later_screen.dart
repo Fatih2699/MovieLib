@@ -5,7 +5,6 @@ import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:intl/intl.dart';
 import 'package:movielib/constants/app_constants.dart';
 import 'package:movielib/screens/detail_screen.dart';
-import 'package:movielib/screens/search_screen.dart';
 import 'package:movielib/services/notification_service.dart';
 import 'package:movielib/view_models/user_view_models.dart';
 import 'package:provider/provider.dart';
@@ -19,8 +18,7 @@ class WatchLaterScreen extends StatefulWidget {
 
 class _WatchLaterScreenState extends State<WatchLaterScreen> {
   late final LocalNotificationService service;
-  DateTime? date;
-  TimeOfDay? time;
+
   @override
   void initState() {
     service = LocalNotificationService();
@@ -29,9 +27,13 @@ class _WatchLaterScreenState extends State<WatchLaterScreen> {
     super.initState();
   }
 
-  Future pickDate() async {
+  void listenToNotification() =>
+      service.onNotificationClick.stream.listen(onNotificationListener);
+  Future pickDate(String title, String id) async {
     final initialDate = DateTime.now();
-    const initialTime = TimeOfDay(hour: 9, minute: 0);
+    TimeOfDay initialTime = TimeOfDay.now();
+    DateTime? date;
+    TimeOfDay? time;
     final newTime = await showTimePicker(
       context: context,
       initialTime: time ?? initialTime,
@@ -43,24 +45,42 @@ class _WatchLaterScreenState extends State<WatchLaterScreen> {
       lastDate: DateTime(DateTime.now().year + 2),
     );
     if (newDate == null) return;
-    setState(() {
-      date = newDate;
-    });
+    date = newDate;
     if (newTime == null) return;
-    setState(() {
-      time = newTime;
-    });
+    time = newTime;
     var formatterDate = DateFormat('yyyy-MM-dd');
     var formatterTime = DateFormat('HH:mm');
-    String dateString = formatterDate.format(date!) +
+    String dateString = formatterDate.format(date) +
         ' ' +
-        time!.hour.toString().padLeft(2, '0') +
+        time.hour.toString().padLeft(2, '0') +
         ':' +
-        time!.minute.toString().padLeft(2, '0');
+        time.minute.toString().padLeft(2, '0');
     DateTime selected = DateTime.parse(dateString);
     DateTime now = DateTime.now();
-    print(selected);
-    print(now);
+    debugPrint(selected.difference(now).inSeconds.toString());
+    service.showScheduledNotificationByDate(
+        title: 'Film Molası 🍿',
+        body: "$title filmini izlemenin zamanı geldi. ",
+        date: selected,
+        payload: id.toString());
+    onNotificationListener(id);
+  }
+
+  void onNotificationListener(String? payload) {
+    if (payload != null && payload.isNotEmpty) {
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) => DetailScreen(
+              id: int.parse(payload),
+              title: '',
+              posterPath: '',
+              genreIDs: const [],
+              voteAverage: 0,
+              date: DateTime.now()),
+        ),
+      );
+    }
   }
 
   @override
@@ -103,31 +123,15 @@ class _WatchLaterScreenState extends State<WatchLaterScreen> {
                             keyboardType: TextInputType.emailAddress,
                             style: const TextStyle(
                                 color: ApplicationConstants.gri),
-                            decoration: InputDecoration(
-                              prefixIcon: const Icon(
+                            decoration: const InputDecoration(
+                              prefixIcon: Icon(
                                 Icons.search,
                                 color: Colors.white60,
                               ),
-                              suffixIcon: IconButton(
-                                onPressed: () {
-                                  debugPrint('Deneme');
-                                  Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                      builder: (context) =>
-                                          const SearchScreen(),
-                                    ),
-                                  );
-                                },
-                                icon: const Icon(
-                                  Icons.filter_alt,
-                                  color: Colors.white60,
-                                ),
-                              ),
                               hintText: 'Ara...',
                               border: InputBorder.none,
-                              contentPadding: const EdgeInsets.only(top: 14.0),
-                              hintStyle: const TextStyle(
+                              contentPadding: EdgeInsets.only(top: 14.0),
+                              hintStyle: TextStyle(
                                 color: ApplicationConstants.gri,
                                 fontSize: 14,
                               ),
@@ -224,27 +228,38 @@ class _WatchLaterScreenState extends State<WatchLaterScreen> {
                             padding: const EdgeInsets.only(left: 20),
                             child: Slidable(
                               endActionPane: ActionPane(
-                                motion: const ScrollMotion(),
+                                motion: ScrollMotion(),
                                 children: [
                                   SlidableAction(
-                                    onPressed: (BuildContext context) {},
+                                    onPressed: (BuildContext context) async {
+                                      _user.currentUser();
+                                      setState(() {
+                                        _user.removeWatchLater(
+                                          _user.user.userId,
+                                          watchLater['id'],
+                                          watchLater['title'],
+                                          watchLater['posterPath'],
+                                          watchLater['genres'],
+                                          watchLater['voteAverage'],
+                                          watchLater['dateTime'].toDate(),
+                                        );
+                                      });
+                                      _user.currentUser();
+                                    },
                                     backgroundColor: Colors.redAccent,
-                                    foregroundColor: ApplicationConstants.mor,
+                                    foregroundColor: Colors.white,
                                     icon: Icons.delete,
                                     label: 'Sil',
                                   ),
                                   SlidableAction(
                                     onPressed: (BuildContext context) async {
-                                      //pickDate();
-                                      await service.showNotification(
-                                        id: 0,
-                                        title: 'Film Molası 🍿',
-                                        body:
-                                            "${watchLater['title']} filmini izlemenin zamanı geldi. ",
+                                      pickDate(
+                                        watchLater['title'],
+                                        watchLater['id'].toString(),
                                       );
                                     },
-                                    backgroundColor: Colors.green,
-                                    foregroundColor: ApplicationConstants.mor,
+                                    backgroundColor: const Color(0XFF1A4D2E),
+                                    foregroundColor: Colors.white,
                                     icon: Icons.timer,
                                     label: 'zamanlayıcı ayarla',
                                   )
@@ -310,12 +325,6 @@ class _WatchLaterScreenState extends State<WatchLaterScreen> {
                                                         FontWeight.bold),
                                               ),
                                             ),
-                                            const Text(
-                                              'Korku , Gizem',
-                                              style: TextStyle(
-                                                  color: Color(0xFFA7A7A7),
-                                                  fontSize: 14),
-                                            ),
                                             showStar(),
                                           ],
                                         ),
@@ -336,18 +345,5 @@ class _WatchLaterScreenState extends State<WatchLaterScreen> {
         ),
       ),
     );
-  }
-
-  void listenToNotification() =>
-      service.onNotificationClick.stream.listen(onNotificationListener);
-  void onNotificationListener(String? payload) {
-    if (payload != null && payload.isNotEmpty) {
-      // Navigator.push(
-      //   context,
-      //   MaterialPageRoute(
-      //     builder: (context) => DenemeVideo(),
-      //   ),
-      // );
-    }
   }
 }

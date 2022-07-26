@@ -481,7 +481,7 @@ class _DetailScreenState extends State<DetailScreen> {
                         height: 10,
                       ),
                       Text(
-                        '$date • Aksiyon , Romantik • 2h 46m',
+                        '$date • ${movie!.genreDetailTitles.join('•')} • 1h 48m',
                         style: const TextStyle(
                             color: Color(0XFF9A9A9A), fontSize: 12),
                       ),
@@ -522,9 +522,7 @@ class _DetailScreenState extends State<DetailScreen> {
                               child: ElevatedButton(
                                 onPressed: () async {
                                   _showDialog();
-                                  // debugPrint(
-                                  //     'https://www.youtube.com/watch?v=' +
-                                  //         trailer!.results[0].key);
+                                  //debugPrint('https://www.youtube.com/watch?v=' +trailer!.results[0].key.toString());
                                   // try {
                                   //   await launchUrl(Uri.parse(
                                   //       'https://www.youtube.com/watch?v=' +

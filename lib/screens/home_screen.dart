@@ -433,19 +433,22 @@ class _HomeScreenState extends State<HomeScreen> {
                                         ),
                                         // genreModel != null
                                         //     ?
-                                        Text(
-                                          popularMovie!.results![index].genres
-                                              .toString(),
-                                          //genreModel!.getGenreTitle(movie!.results![index].genreId!),
-                                          style: const TextStyle(
-                                              color: Colors.white60,
-                                              fontSize: 13),
+                                        SizedBox(
+                                          width: 200,
+                                          height: 30,
+                                          child: AutoSizeText(
+                                            popularMovie!
+                                                .results![index].genreTitles
+                                                .join(','),
+                                            //genreModel!.getGenreTitle(movie!.results![index].genreId!),
+
+                                            style: const TextStyle(
+                                                color: Colors.white60,
+                                                fontSize: 13),
+                                            maxFontSize: 13,
+                                            maxLines: 2,
+                                          ),
                                         ),
-                                        // : const Text(
-                                        //     'Film türü bulunamadı',
-                                        //     style: TextStyle(
-                                        //         color: Colors.white),
-                                        //   ),
                                         const SizedBox(
                                           height: 6,
                                         ),

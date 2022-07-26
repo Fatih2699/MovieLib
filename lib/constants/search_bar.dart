@@ -113,10 +113,14 @@ class _SearchBarState extends State<SearchBar> {
                             child: Padding(
                               padding: const EdgeInsets.all(8.0),
                               child: ListTile(
-                                leading: Image.network(
-                                  ApplicationConstants.poster +
-                                      search.posterPath!,
-                                ),
+                                leading: search.posterPath == null
+                                    ? Image.asset(
+                                        'assets/images/popcorn.png',
+                                      )
+                                    : Image.network(
+                                        ApplicationConstants.poster +
+                                            search.posterPath!,
+                                      ),
                                 title: Text(
                                   search.title!,
                                   style: const TextStyle(

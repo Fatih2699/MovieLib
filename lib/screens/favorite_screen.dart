@@ -6,7 +6,6 @@ import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:movielib/constants/app_constants.dart';
 import 'package:movielib/screens/detail_screen.dart';
 import 'package:movielib/screens/home_screen.dart';
-import 'package:movielib/screens/search_screen.dart';
 import 'package:movielib/view_models/user_view_models.dart';
 import 'package:provider/provider.dart';
 
@@ -66,31 +65,15 @@ class _FavoriteScreenState extends State<FavoriteScreen> {
                             keyboardType: TextInputType.emailAddress,
                             style: const TextStyle(
                                 color: ApplicationConstants.gri),
-                            decoration: InputDecoration(
-                              prefixIcon: const Icon(
+                            decoration: const InputDecoration(
+                              prefixIcon: Icon(
                                 Icons.search,
                                 color: Colors.white60,
                               ),
-                              suffixIcon: IconButton(
-                                onPressed: () {
-                                  debugPrint('Deneme');
-                                  Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                      builder: (context) =>
-                                          const SearchScreen(),
-                                    ),
-                                  );
-                                },
-                                icon: const Icon(
-                                  Icons.filter_alt,
-                                  color: Colors.white60,
-                                ),
-                              ),
                               hintText: 'Ara...',
                               border: InputBorder.none,
-                              contentPadding: const EdgeInsets.only(top: 14.0),
-                              hintStyle: const TextStyle(
+                              contentPadding: EdgeInsets.only(top: 14.0),
+                              hintStyle: TextStyle(
                                 color: ApplicationConstants.gri,
                                 fontSize: 14,
                               ),
@@ -315,7 +298,7 @@ class _FavoriteScreenState extends State<FavoriteScreen> {
                                                     CrossAxisAlignment.start,
                                                 children: <Widget>[
                                                   SizedBox(
-                                                    height: 50,
+                                                    height: 30,
                                                     width: 240,
                                                     child: AutoSizeText(
                                                       favorites['title'],
@@ -326,14 +309,6 @@ class _FavoriteScreenState extends State<FavoriteScreen> {
                                                           fontWeight:
                                                               FontWeight.bold),
                                                     ),
-                                                  ),
-                                                  Text(
-                                                    favorites['genres']
-                                                        .toString(),
-                                                    style: const TextStyle(
-                                                        color:
-                                                            Color(0xFFA7A7A7),
-                                                        fontSize: 14),
                                                   ),
                                                   showStar(),
                                                 ],

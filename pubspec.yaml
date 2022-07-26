@@ -95,7 +95,6 @@ flutter:
   assets:
     - assets/images/
     - assets/emogies/
-    - assets/movie/
     - assets/icons/
     - assets/lottie/
   #   - images/a_dot_ham.jpeg

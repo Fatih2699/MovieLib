@@ -1,6 +1,6 @@
 import 'dart:convert';
 
-import 'package:movielib/model/movie_genre.dart';
+import 'movie_genre.dart';
 
 Movie movieFromMap(String str) => Movie.fromMap(json.decode(str));
 
@@ -24,9 +24,10 @@ class Movie {
     required this.voteCount,
     required this.genreId,
     required this.voteAverage,
+    this.detailGenre,
   });
   String? backdropPath;
-  List<Genre>? genres;
+  List<String>? genres;
   int? id;
   String? imdbId;
   String? title;
@@ -38,6 +39,24 @@ class Movie {
   int? voteCount;
   num? voteAverage;
   List<int>? genreId;
+  List<Genre>? detailGenre;
+  List<String> get genreTitles {
+    return getGenreTitles(genreId);
+  }
+
+  List<String> get genreDetailTitles {
+    List<String> g = [];
+    if (detailGenre != null) {
+      for (var i = 0; i < detailGenre!.length; i++) {
+        Genre genre = detailGenre![i];
+        g.add(genre.name);
+        if (i == 2) {
+          break;
+        }
+      }
+    }
+    return g;
+  }
 
   String get poster => posterPath != null
       ? 'https://image.tmdb.org/t/p/w185' + posterPath!
@@ -63,91 +82,38 @@ class Movie {
     }
   }
 
-  // static String _getGenreTitles(List<int> ids) {
-  //   String titles = "";
-  //
-  //   var _genres = [
-  //     {
-  //       "id": 28,
-  //       "name": "Aksiyon"
-  //     },
-  //     {
-  //       "id": 12,
-  //       "name": "Macera"
-  //     },
-  //     {
-  //       "id": 16,
-  //       "name": "Animasyon"
-  //     },
-  //     {
-  //       "id": 35,
-  //       "name": "Komedi"
-  //     },
-  //     {
-  //       "id": 80,
-  //       "name": "Suç"
-  //     },
-  //     {
-  //       "id": 99,
-  //       "name": "Belgesel"
-  //     },
-  //     {
-  //       "id": 18,
-  //       "name": "Dram"
-  //     },
-  //     {
-  //       "id": 10751,
-  //       "name": "Aile"
-  //     },
-  //     {
-  //       "id": 14,
-  //       "name": "Fantastik"
-  //     },
-  //     {
-  //       "id": 36,
-  //       "name": "Tarih"
-  //     },
-  //     {
-  //       "id": 27,
-  //       "name": "Korku"
-  //     },
-  //     {
-  //       "id": 10402,
-  //       "name": "Müzik"
-  //     },
-  //     {
-  //       "id": 9648,
-  //       "name": "Gizem"
-  //     },
-  //     {
-  //       "id": 10749,
-  //       "name": "Romantik"
-  //     },
-  //     {
-  //       "id": 878,
-  //       "name": "Bilim-Kurgu"
-  //     },
-  //     {
-  //       "id": 10770,
-  //       "name": "TV film"
-  //     },
-  //     {
-  //       "id": 53,
-  //       "name": "Gerilim"
-  //     },
-  //     {
-  //       "id": 10752,
-  //       "name": "Savaş"
-  //     },
-  //     {
-  //       "id": 37,
-  //       "name": "Vahşi Batı"
-  //     }
-  //   ];
-  //   ids.map((id) =>
-  //     _genres.
-  //   );
-  // }
+  static List<String> getGenreTitles(List<int>? ids) {
+    List<String> movieGenre = [];
+    Map<int, String> _genres = {
+      28: "Aksiyon",
+      12: "Macera",
+      16: "Animasyon",
+      35: "Komedi",
+      80: "Suç",
+      99: "Belgesel",
+      18: "Dram",
+      10751: "Aile",
+      14: "Fantastik",
+      36: "Tarih",
+      27: "Korku",
+      10402: "Müzik",
+      9648: "Gizem",
+      10749: "Romantik",
+      878: "Bilim-Kurgu",
+      10770: "TV film",
+      53: "Gerilim",
+      10752: "Savaş",
+      37: "Vahşi Batı"
+    };
+    if (ids != null) {
+      for (var id in ids) {
+        if (_genres[id] != null) {
+          movieGenre.add(_genres[id]!);
+        }
+      }
+    }
+    return movieGenre;
+  }
 
   static String _getBackdrop(String? path) {
     if (path == null) {
@@ -169,27 +135,32 @@ class Movie {
     video = json["video"];
     voteCount = json["vote_count"] ?? 0;
     voteAverage = json["vote_average"] ?? 0;
+    detailGenre = json["genres"] != null
+        ? List<Genre>.from(json["genres"].map((x) => Genre.fromJson(x)))
+        : null;
   }
 
   factory Movie.fromMap(Map<String, dynamic> json) => Movie(
-        backdropPath: _getBackdrop(json['backdrop_path']),
-        genres: List<Genre>.from(json["genres"].map((x) => Genre.fromMap(x))),
-        id: json["id"] ?? '',
-        imdbId: json["imdb_id"] ?? '',
-        overView: json["overview"] ?? '',
-        popularity: json["popularity"].toDouble() ?? 0,
-        posterPath: json["poster_path"],
-        releaseDate: _getReleaseTime(json['release_date']),
-        title: json["title"] ?? 'Başlık Yok',
-        video: json["video"] ?? false,
-        voteCount: json["vote_count"] ?? 0,
-        genreId: [],
-        voteAverage: json["vote_average"] ?? 0,
-      );
+      backdropPath: _getBackdrop(json['backdrop_path']),
+      genres: getGenreTitles(json["genre_ids"] ?? []),
+      id: json["id"] ?? '',
+      imdbId: json["imdb_id"] ?? '',
+      overView: json["overview"] ?? '',
+      popularity: json["popularity"].toDouble() ?? 0,
+      posterPath: json["poster_path"],
+      releaseDate: _getReleaseTime(json['release_date']),
+      title: json["title"] ?? 'Başlık Yok',
+      video: json["video"] ?? false,
+      voteCount: json["vote_count"] ?? 0,
+      genreId: json["genre_ids"] ?? [],
+      voteAverage: json["vote_average"] ?? 0,
+      detailGenre: json["genres"] != null
+          ? List<Genre>.from(json["genres"].map((x) => Genre.fromJson(x)))
+          : null);
 
   Map<String, dynamic> toMap() => {
         "backdrop_path": backdropPath,
-        "genres": List<dynamic>.from(genres!.map((x) => x.toMap())),
+        "genres": genres,
         "id": id,
         "imdb_id": imdbId,
         "overview": overView,
@@ -204,7 +175,7 @@ class Movie {
       };
 
   factory Movie.fromSqfMap(Map<String, dynamic> json) => Movie(
-      genres: List<Genre>.from(json["genres"].map((x) => Genre.fromMap(x))),
+      genres: getGenreTitles(json["genre_ids"] ?? []),
       backdropPath: _getBackdrop(json['backdrop_path']),
       id: json["id"],
       overView: json["overview"],
@@ -215,13 +186,11 @@ class Movie {
       video: json["video"],
       voteCount: json["vote_count"],
       imdbId: '',
-      genreId: [],
+      genreId: json["genre_ids"] ?? [],
       voteAverage: json["vote_average"]);
   Map<String, dynamic> toMapSqf() => {
         "backdrop_path": backdropPath,
-        "genres": genres != null
-            ? List<dynamic>.from(genres!.map((x) => x.toMap()))
-            : [],
+        "genres": genres ?? [],
         "genre_ids": List<dynamic>.from(genreId!.map((x) => x)),
         "id": id,
         "overview": overView,

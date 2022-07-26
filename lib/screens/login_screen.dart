@@ -186,16 +186,16 @@ class _LoginScreenState extends State<LoginScreen> {
                     ),
                   ],
                 ),
-                Container(
-                  alignment: Alignment.centerRight,
-                  child: TextButton(
-                    onPressed: () {},
-                    child: const Text(
-                      'Şifremi Unuttum',
-                      style: TextStyle(color: ApplicationConstants.mor),
-                    ),
-                  ),
-                ),
+                // Container(
+                //   alignment: Alignment.centerRight,
+                //   child: TextButton(
+                //     onPressed: () {},
+                //     child: const Text(
+                //       'Şifremi Unuttum',
+                //       style: TextStyle(color: ApplicationConstants.mor),
+                //     ),
+                //   ),
+                // ),
                 const SizedBox(
                   height: 300,
                 ),

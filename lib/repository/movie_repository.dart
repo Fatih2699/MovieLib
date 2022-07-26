@@ -67,7 +67,7 @@ class MovieRepository implements MovieService {
   Future<TrailersModel> fetchMovieTrailers(int id) async {
     final response = await client.get(
       Uri.parse(
-        ('${baseUrl}movie/$id/videos?api_key=$apiKey$language'),
+        ('${baseUrl}movie/$id/videos?api_key=$apiKey&language=en-EN'),
       ),
     );
     if (response.statusCode == 200) {

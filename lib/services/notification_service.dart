@@ -94,6 +94,28 @@ class LocalNotificationService {
     );
   }
 
+  Future<void> showScheduledNotificationByDate(
+      {required String title,
+      required String body,
+      required DateTime date,
+      required String payload}) async {
+    final details = await _notificationDetails();
+    await _localNotificationService.zonedSchedule(
+      0,
+      title,
+      body,
+      tz.TZDateTime.from(
+        date,
+        tz.local,
+      ),
+      details,
+      payload: payload,
+      androidAllowWhileIdle: true,
+      uiLocalNotificationDateInterpretation:
+          UILocalNotificationDateInterpretation.absoluteTime,
+    );
+  }
+
   Future<void> showPayloadNotification({
     required int id,
     required String title,
